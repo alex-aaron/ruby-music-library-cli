@@ -1,5 +1,6 @@
 class Genre
 
+    extend Concerns::Findable
     attr_accessor :name
 
     @@all = []
@@ -7,7 +8,6 @@ class Genre
     def initialize(name)
         @name = name
         @songs = []
-        save
     end
 
     def save
@@ -34,7 +34,7 @@ class Genre
 
     def artists
         artist_return = []
-        Song.all.collect do |song|
+        songs.collect do |song|
             if song.genre == self
                 artist_return << song.artist
             end
