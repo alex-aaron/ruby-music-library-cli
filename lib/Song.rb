@@ -41,9 +41,8 @@ class Song
     def genre=(genre)
         if genre != nil
             @genre = genre
-            value = genre.songs.include?(self)
-            if value == false
-                genre.songs << self
+            if !genre.songs.include?(self)
+              genre.songs << self
             end
         else
             @genre = nil
@@ -69,14 +68,16 @@ class Song
         file_array = file.split(" - ")
         artist = file_array[0]
         title = file_array[1]
+        genre = file_array[2].gsub(".mp3", "")
         new_song = self.new(title)
-        new_song.artist = Artist.new(artist)
+        new_song.genre =  Genre.find_or_create_by_name(genre)
+        new_song.artist = Artist.find_or_create_by_name(artist)
         return new_song
     end
     
     def self.create_from_filename(file)
         new_song = new_from_filename(file)
-        create(new_song)
+        new_song.save
     end
 
 end
